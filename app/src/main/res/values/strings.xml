@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Interesting Places</string>
+    <string name="title_activity_splash">Interesting Places</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="title_activity_places_list">Places</string>
+</resources>
