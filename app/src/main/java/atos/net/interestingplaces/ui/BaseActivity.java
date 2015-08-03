@@ -1,7 +1,8 @@
 package atos.net.interestingplaces.ui;
 
-import android.support.v7.app.ActionBarActivity;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -56,5 +57,10 @@ public class BaseActivity extends ActionBarActivity {
     protected void onStop() {
         mSpiceManager.shouldStop();
         super.onStop();
+    }
+
+    protected float calculateDistance(Location from,Location to){
+        float distance = 0;
+        return distance;
     }
 }

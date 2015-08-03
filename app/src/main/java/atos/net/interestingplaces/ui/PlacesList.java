@@ -1,7 +1,6 @@
 package atos.net.interestingplaces.ui;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,6 +58,9 @@ public class PlacesList extends BaseActivity {
 
     }
 
+    /**
+     * Initialize the UI components
+     */
     private void init(){
         mListView = (ListView) findViewById(R.id.lv_places);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -72,12 +74,20 @@ public class PlacesList extends BaseActivity {
         });
     }
 
+    /**
+     * Update the UI with the POI list.
+     * @param poiList - List of points of interest.
+     */
     private void update(final POIList poiList){
         ArrayList<PlaceOfInterest> list = (ArrayList<PlaceOfInterest>) poiList.getList();
         POIListAdapter adapter = new POIListAdapter(this,list);
         mListView.setAdapter(adapter);
     }
 
+    /**
+     * Class to handle the data returned by .
+     * @see com.octo.android.robospice.request.listener.RequestListener
+     */
     private class POIListRequestListener implements RequestListener<POIList>{
 
         @Override
@@ -87,10 +97,6 @@ public class PlacesList extends BaseActivity {
 
         @Override
         public void onRequestSuccess(final POIList poiList) {
-            ArrayList<PlaceOfInterest> list = (ArrayList<PlaceOfInterest>) poiList.getList();
-            for(PlaceOfInterest poi : list){
-                Log.d(TAG, poi.toString());
-            }
             update(poiList);
         }
     }
