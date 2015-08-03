@@ -5,9 +5,14 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.octo.android.robospice.Jackson2SpringAndroidSpiceService;
+import com.octo.android.robospice.SpiceManager;
+
 import atos.net.interestingplaces.R;
 
 public class BaseActivity extends ActionBarActivity {
+
+    protected SpiceManager mSpiceManager = new SpiceManager(Jackson2SpringAndroidSpiceService.class);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,5 +40,21 @@ public class BaseActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Dispatch onStart() to all fragments.  Ensure any created loaders are
+     * now started.
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mSpiceManager.start(this);
+    }
+
+    @Override
+    protected void onStop() {
+        mSpiceManager.shouldStop();
+        super.onStop();
     }
 }

@@ -22,7 +22,28 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'
-    compile group:'com.octo.android.robospice', name:'robospice', version:'1.4.14'
-    compile group:'com.octo.android.robospice', name:'robospice-spring-android', version:'1.4.14'
-
+    compile 'com.android.support:cardview-v7:21.0.+'
+    /*compile group:'com.octo.android.robospice', name:'robospice', version:'1.4.14'
+                compile group:'com.octo.android.robospice', name:'robospice-spring-android', version:'1.4.14'*/
+    compile files('libs/jackson-annotations-2.2.1.jar')
+    compile files('libs/jackson-core-2.2.1.jar')
+    compile files('libs/jackson-databind-2.2.1.jar')
+    compile files('libs/spring-android-auth-1.0.1.RELEASE.jar')
+    compile files('libs/spring-android-core-1.0.1.RELEASE.jar')
+    compile files('libs/spring-android-rest-template-1.0.1.RELEASE.jar')
+    compile files('libs/robospice-cache-1.4.14.jar')
 }
+
+android {
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+    }
+}
+
