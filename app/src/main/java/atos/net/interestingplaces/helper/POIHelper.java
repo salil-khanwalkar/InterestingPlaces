@@ -76,4 +76,33 @@ public class POIHelper {
         return placeOfInterestList;
     }
 
+    public static List<PlaceOfInterest> read(Context context, PlaceOfInterest placeOfInterest){
+        List<Place> list = null;
+        List<PlaceOfInterest> placeOfInterestList = null;
+        Place place = convertToGreenDao(placeOfInterest);
+        PlaceDao placeDao = getPOIDao(context);
+        list = placeDao.queryBuilder().
+                where(PlaceDao.Properties.Id.eq(place.getPlaceId())).
+                list();
+        if(null != list){
+            placeOfInterestList = new ArrayList<>();
+            for(Place placeObj : list){
+                PlaceOfInterest placeOfInterestObj = convertFromGreenDao(placeObj);
+                placeOfInterestList.add(placeOfInterestObj);
+            }
+        }
+        return placeOfInterestList;
+    }
+
+    public static void update(Context context,PlaceOfInterest placeOfInterest){
+        Place place = convertToGreenDao(placeOfInterest);
+        PlaceDao placeDao = getPOIDao(context);
+        placeDao.update(place);
+    }
+
+    public static long getCount(Context context){
+        PlaceDao dao = getPOIDao(context);
+        return dao.count();
+    }
+
 }

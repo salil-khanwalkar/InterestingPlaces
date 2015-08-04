@@ -13,6 +13,7 @@ import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import atos.net.interestingplaces.PoiDetailsRequest;
 import atos.net.interestingplaces.PoiListRequest;
@@ -26,13 +27,20 @@ public class PlacesList extends BaseActivity {
 
     private static final String TAG = PlacesList.class.getSimpleName();
     private ListView mListView;
+    private POIListAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_places_list);
         init();
-        performRequest();
+        long count = POIHelper.getCount(this);
+        if(count > 0){
+            ArrayList<PlaceOfInterest> list = (ArrayList<PlaceOfInterest>) readAll();
+            update(list);
+        }else {
+            performRequest();
+        }
     }
 
     @Override
@@ -76,11 +84,13 @@ public class PlacesList extends BaseActivity {
                 getPlaceDetails(obj);
             }
         });
+        mAdapter = new POIListAdapter(this,null);
+        mListView.setAdapter(mAdapter);
     }
 
     /**
-     * Get the
-     * @param placeOfInterest
+     * Get details of the place.
+     * @param placeOfInterest Place to get the details of.
      */
     private void getPlaceDetails(PlaceOfInterest placeOfInterest){
         PoiDetailsRequest poiDetailsRequest = new PoiDetailsRequest(placeOfInterest.getId());
@@ -93,13 +103,20 @@ public class PlacesList extends BaseActivity {
      */
     private void update(final POIList poiList){
         ArrayList<PlaceOfInterest> list = (ArrayList<PlaceOfInterest>) poiList.getList();
+        update(list);
+    }
+
+    /**
+     * Update the list of places.
+     * @param placeOfInterests - List of points of interest.
+     */
+    private void update(List<PlaceOfInterest> placeOfInterests){
         long id = 0;
-        for(PlaceOfInterest placeOfInterest : list){
+        for(PlaceOfInterest placeOfInterest : placeOfInterests){
             id = POIHelper.insert(PlacesList.this,placeOfInterest);
             Log.d(TAG,"Inserted " + id + " Records");
         }
-        POIListAdapter adapter = new POIListAdapter(this,list);
-        mListView.setAdapter(adapter);
+        mAdapter.setList(placeOfInterests);
     }
 
     /**
@@ -123,7 +140,6 @@ public class PlacesList extends BaseActivity {
             for(PlaceOfInterest obj : placeOfInterestArrayList){
                 Log.d(TAG,"Read " + obj.toString());
             }
-
             // End of test code
         }
     }
@@ -138,7 +154,6 @@ public class PlacesList extends BaseActivity {
         @Override
         public void onRequestSuccess(final PlaceOfInterest placeOfInterest) {
             Log.d(TAG, placeOfInterest.toString());
-
             Intent intent = new Intent(PlacesList.this,PlaceDetails.class);
             intent.putExtra("PlaceDetails",placeOfInterest);
             startActivity(intent);

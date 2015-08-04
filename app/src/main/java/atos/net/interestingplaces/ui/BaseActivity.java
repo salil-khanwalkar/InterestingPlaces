@@ -9,7 +9,12 @@ import android.view.MenuItem;
 import com.octo.android.robospice.Jackson2SpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import atos.net.interestingplaces.R;
+import atos.net.interestingplaces.helper.POIHelper;
+import atos.net.interestingplaces.pojo.PlaceOfInterest;
 
 public class BaseActivity extends ActionBarActivity {
 
@@ -62,5 +67,10 @@ public class BaseActivity extends ActionBarActivity {
     protected float calculateDistance(Location from,Location to){
         float distance = 0;
         return distance;
+    }
+
+    protected List<PlaceOfInterest> readAll(){
+        ArrayList<PlaceOfInterest> list = (ArrayList<PlaceOfInterest>) POIHelper.readAll(this);
+        return list;
     }
 }

@@ -29,6 +29,10 @@ public class POIListAdapter extends BaseAdapter {
         mList = list;
     }
 
+    public void setList(final List<PlaceOfInterest> list) {
+        mList = list;
+    }
+
     /**
      * How many items are in the data set represented by this Adapter.
      *
