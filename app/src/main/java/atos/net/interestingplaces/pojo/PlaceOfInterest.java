@@ -3,13 +3,18 @@ package atos.net.interestingplaces.pojo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.io.Serializable;
+
 /**
  * Created by a551481 on 03-08-2015.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PlaceOfInterest {
+public class PlaceOfInterest implements Serializable{
+
+    private static final long serialVersionUID = 2210733094784155341L;
+
     @JsonProperty("id")
-    private int mId;
+    private int    mId;
     @JsonProperty("title")
     private String mTitle;
     @JsonProperty("transport")
@@ -22,6 +27,8 @@ public class PlaceOfInterest {
     private String mDescription;
     @JsonProperty("phone")
     private String mPhone;
+    @JsonProperty("address")
+    private String mAddress;
 
 
     public int getId() {
@@ -80,6 +87,14 @@ public class PlaceOfInterest {
         mPhone = phone;
     }
 
+    public String getAddress() {
+        return mAddress;
+    }
+
+    public void setAddress(final String address) {
+        mAddress = address;
+    }
+
     @Override
     public String toString() {
         return "PlaceOfInterest{" +
@@ -90,6 +105,7 @@ public class PlaceOfInterest {
                 ", mGeoCoordinates='" + mGeoCoordinates + '\'' +
                 ", mDescription='" + mDescription + '\'' +
                 ", mPhone='" + mPhone + '\'' +
+                ", mAddress='" + mAddress + '\'' +
                 '}';
     }
 }
