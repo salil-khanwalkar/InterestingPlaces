@@ -13,6 +13,9 @@ public class PlaceOfInterest implements Serializable{
 
     private static final long serialVersionUID = 2210733094784155341L;
 
+    public static final int RECORD_LEVEL_PARTIAL = 1;
+    public static final int RECORD_LEVEL_COMPLETE = 2;
+
     @JsonProperty("id")
     private int    mId;
     @JsonProperty("title")
@@ -29,6 +32,10 @@ public class PlaceOfInterest implements Serializable{
     private String mPhone;
     @JsonProperty("address")
     private String mAddress;
+    /**
+     * Defines the level of the record data , Partially fetched or fully fetched.
+     */
+    private int    mLevel;
 
 
     public int getId() {
@@ -93,6 +100,14 @@ public class PlaceOfInterest implements Serializable{
 
     public void setAddress(final String address) {
         mAddress = address;
+    }
+
+    public int getLevel() {
+        return mLevel;
+    }
+
+    public void setLevel(final int level) {
+        mLevel = level;
     }
 
     @Override

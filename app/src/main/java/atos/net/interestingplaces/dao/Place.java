@@ -15,6 +15,7 @@ public class Place {
     private String description;
     private String phone;
     private String address;
+    private Integer level;
 
     public Place() {
     }
@@ -23,7 +24,7 @@ public class Place {
         this.id = id;
     }
 
-    public Place(Long id, int placeId, String title, String transport, String email, String geocoordinates, String description, String phone, String address) {
+    public Place(Long id, int placeId, String title, String transport, String email, String geocoordinates, String description, String phone, String address, Integer level) {
         this.id = id;
         this.placeId = placeId;
         this.title = title;
@@ -33,6 +34,7 @@ public class Place {
         this.description = description;
         this.phone = phone;
         this.address = address;
+        this.level = level;
     }
 
     public Long getId() {
@@ -105,6 +107,14 @@ public class Place {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Integer getLevel() {
+        return level;
+    }
+
+    public void setLevel(Integer level) {
+        this.level = level;
     }
 
 }

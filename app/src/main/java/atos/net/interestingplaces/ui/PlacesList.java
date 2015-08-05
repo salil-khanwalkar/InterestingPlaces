@@ -34,13 +34,7 @@ public class PlacesList extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_places_list);
         init();
-        long count = POIHelper.getCount(this);
-        if(count > 0){
-            ArrayList<PlaceOfInterest> list = (ArrayList<PlaceOfInterest>) readAll();
-            update(list);
-        }else {
-            performRequest();
-        }
+        getPOIList();
     }
 
     @Override
@@ -65,10 +59,28 @@ public class PlacesList extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void performRequest(){
+    /**
+     * Get the POI list from the server.
+     */
+    private void performPOIListRequest(){
         PoiListRequest request = new PoiListRequest();
-        mSpiceManager.execute(request,new POIListRequestListener());
+        mSpiceManager.execute(request, new POIListRequestListener());
 
+    }
+
+    /**
+     * Get the POI list from either the database or
+     * via the webservice.
+     */
+    private void getPOIList(){
+        long count = POIHelper.getCount(this);
+        Log.d(TAG, "Found " + count + " Records");
+        if(count > 0){
+            ArrayList<PlaceOfInterest> list = (ArrayList<PlaceOfInterest>) readAll();
+            updateView(list);
+        }else {
+            performPOIListRequest();
+        }
     }
 
     /**
@@ -81,7 +93,43 @@ public class PlacesList extends BaseActivity {
             public void onItemClick(final AdapterView<?> parent, final View view,
                                     final int position, final long id) {
                 PlaceOfInterest obj = (PlaceOfInterest) parent.getItemAtPosition(position);
-                getPlaceDetails(obj);
+                /**
+                 * Read the record from the DB as we need to
+                 * check the data level.
+                 */
+                ArrayList<PlaceOfInterest> list = (ArrayList<PlaceOfInterest>)
+                        POIHelper.read(PlacesList.this, obj);
+                if(null != list){
+                    /**
+                     * Assuming we have a unique record for this POI.
+                     */
+                    PlaceOfInterest temp = list.get(0);
+                    int level = temp.getLevel();
+                    switch (level){
+                        case PlaceOfInterest.RECORD_LEVEL_PARTIAL:
+                            performPOIDetailsRequest(obj);
+                            break;
+                        case PlaceOfInterest.RECORD_LEVEL_COMPLETE:
+                            /**
+                             * Pass the record to the details activity
+                             */
+                            gotoDetails(temp);
+                            break;
+                        default:
+                            /**
+                             * Always fetch the record from the server in case
+                             * of any failure.
+                             */
+                            performPOIDetailsRequest(obj);
+
+                    }
+                }else {
+                    /**
+                     * No record found , fetch it from the server.
+                     */
+                    performPOIDetailsRequest(obj);
+                }
+
             }
         });
         mAdapter = new POIListAdapter(this,null);
@@ -92,7 +140,7 @@ public class PlacesList extends BaseActivity {
      * Get details of the place.
      * @param placeOfInterest Place to get the details of.
      */
-    private void getPlaceDetails(PlaceOfInterest placeOfInterest){
+    private void performPOIDetailsRequest(PlaceOfInterest placeOfInterest){
         PoiDetailsRequest poiDetailsRequest = new PoiDetailsRequest(placeOfInterest.getId());
         mSpiceManager.execute(poiDetailsRequest, new POIDetailsRequestListener());
     }
@@ -101,22 +149,28 @@ public class PlacesList extends BaseActivity {
      * Update the UI with the POI list.
      * @param poiList - List of points of interest.
      */
-    private void update(final POIList poiList){
+    private void updateView(final POIList poiList){
         ArrayList<PlaceOfInterest> list = (ArrayList<PlaceOfInterest>) poiList.getList();
-        update(list);
+        updateView(list);
     }
 
     /**
      * Update the list of places.
      * @param placeOfInterests - List of points of interest.
      */
-    private void update(List<PlaceOfInterest> placeOfInterests){
-        long id = 0;
-        for(PlaceOfInterest placeOfInterest : placeOfInterests){
-            id = POIHelper.insert(PlacesList.this,placeOfInterest);
-            Log.d(TAG,"Inserted " + id + " Records");
-        }
+    private void updateView(List<PlaceOfInterest> placeOfInterests){
         mAdapter.setList(placeOfInterests);
+        mAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Start the PlaceDetails activity with the PlaceOfInterest data.
+     * @param placeOfInterest
+     */
+    private void gotoDetails(PlaceOfInterest placeOfInterest){
+        Intent intent = new Intent(PlacesList.this,PlaceDetails.class);
+        intent.putExtra("PlaceDetails",placeOfInterest);
+        startActivity(intent);
     }
 
     /**
@@ -127,36 +181,50 @@ public class PlacesList extends BaseActivity {
 
         @Override
         public void onRequestFailure(final com.octo.android.robospice.persistence.exception.SpiceException e) {
+            // TODO : Handle failure
 
         }
 
         @Override
         public void onRequestSuccess(final POIList poiList) {
-            update(poiList);
-            // TODO : Remove test code
-            // Start of test code
-            ArrayList<PlaceOfInterest> placeOfInterestArrayList = (ArrayList<PlaceOfInterest>)
-                    POIHelper.readAll(PlacesList.this);
-            for(PlaceOfInterest obj : placeOfInterestArrayList){
-                Log.d(TAG,"Read " + obj.toString());
-            }
-            // End of test code
+            /**
+             * Insert in the DB.
+             */
+            insert(poiList);
+            /**
+             * Update the UI.
+             */
+            updateView(poiList);
         }
     }
 
+    /**
+     * Class to handle the data returned by .
+     * @see com.octo.android.robospice.request.listener.RequestListener
+     */
     private class POIDetailsRequestListener implements RequestListener<PlaceOfInterest> {
 
         @Override
         public void onRequestFailure(final SpiceException e) {
-
+            // TODO : Handle Failure
         }
 
         @Override
         public void onRequestSuccess(final PlaceOfInterest placeOfInterest) {
             Log.d(TAG, placeOfInterest.toString());
-            Intent intent = new Intent(PlacesList.this,PlaceDetails.class);
-            intent.putExtra("PlaceDetails",placeOfInterest);
-            startActivity(intent);
+            /**
+             * We got the complete data for this POI.
+             */
+            placeOfInterest.setLevel(PlaceOfInterest.RECORD_LEVEL_COMPLETE);
+            /**
+             * Update the record in DB
+             */
+            POIHelper.update(PlacesList.this,placeOfInterest);
+            /**
+             * Start the details activity
+             */
+            gotoDetails(placeOfInterest);
+
         }
     }
 }

@@ -11,6 +11,7 @@ import atos.net.interestingplaces.dao.DaoSession;
 import atos.net.interestingplaces.dao.Place;
 import atos.net.interestingplaces.dao.PlaceDao;
 import atos.net.interestingplaces.pojo.PlaceOfInterest;
+import de.greenrobot.dao.query.QueryBuilder;
 
 /**
  * Created by a551481 on 04-08-2015.
@@ -29,6 +30,7 @@ public class POIHelper {
 
     public static Place convertToGreenDao(PlaceOfInterest placeOfInterest){
         Place place = new Place();
+        place.setId((long) placeOfInterest.getId());
         place.setPlaceId(placeOfInterest.getId());
         place.setAddress(placeOfInterest.getAddress());
         place.setDescription(placeOfInterest.getDescription());
@@ -37,6 +39,7 @@ public class POIHelper {
         place.setPhone(placeOfInterest.getPhone());
         place.setTransport(placeOfInterest.getTransport());
         place.setTitle(placeOfInterest.getTitle());
+        place.setLevel(placeOfInterest.getLevel());
         return  place;
     }
 
@@ -51,6 +54,7 @@ public class POIHelper {
         placeOfInterest.setDescription(place.getDescription());
         placeOfInterest.setEmail(place.getEmail());
         placeOfInterest.setGeoCoordinates(place.getGeocoordinates());
+        placeOfInterest.setLevel(place.getLevel());
 
         return placeOfInterest;
     }
@@ -82,7 +86,7 @@ public class POIHelper {
         Place place = convertToGreenDao(placeOfInterest);
         PlaceDao placeDao = getPOIDao(context);
         list = placeDao.queryBuilder().
-                where(PlaceDao.Properties.Id.eq(place.getPlaceId())).
+                where(PlaceDao.Properties.Id.eq(place.getId())).
                 list();
         if(null != list){
             placeOfInterestList = new ArrayList<>();
@@ -97,7 +101,14 @@ public class POIHelper {
     public static void update(Context context,PlaceOfInterest placeOfInterest){
         Place place = convertToGreenDao(placeOfInterest);
         PlaceDao placeDao = getPOIDao(context);
+
+        QueryBuilder builder = placeDao.queryBuilder();
+        builder.where(PlaceDao.Properties.Id.eq(placeOfInterest.getId()));
+
+        List<Place> placeList = builder.list();
+
         placeDao.update(place);
+
     }
 
     public static long getCount(Context context){
