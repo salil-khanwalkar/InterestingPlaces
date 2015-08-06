@@ -4,9 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import atos.net.interestingplaces.R;
@@ -15,10 +19,58 @@ import atos.net.interestingplaces.pojo.PlaceOfInterest;
 /**
  * Created by a551481 on 03-08-2015.
  */
-public class POIListAdapter extends BaseAdapter {
+public class POIListAdapter extends BaseAdapter implements Filterable {
 
-    private Context mContext;
-    private List<PlaceOfInterest> mList;
+    private Context               mContext;
+    private List<PlaceOfInterest> mFilteredList;
+    private List<PlaceOfInterest> mOriginalList;
+
+    /**
+     * <p>Returns a filter that can be used to constrain data with a filtering
+     * pattern.</p>
+     * <p/>
+     * <p>This method is usually implemented by {@link Adapter}
+     * classes.</p>
+     *
+     * @return a filter used to constrain data
+     */
+    @Override
+    public Filter getFilter() {
+
+        Filter filter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(final CharSequence constraint) {
+                mFilteredList = filterList(constraint);
+                FilterResults         filterResults = new FilterResults();
+                filterResults.values = mFilteredList;
+                filterResults.count = mFilteredList.size();
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(final CharSequence constraint, final FilterResults results) {
+                mFilteredList = (ArrayList<PlaceOfInterest>) results.values;
+                POIListAdapter.this.notifyDataSetChanged();
+            }
+
+            private List<PlaceOfInterest> filterList(CharSequence charSequence){
+                if(0 == charSequence.length()){
+                    return mOriginalList;
+                }
+                List<PlaceOfInterest> filteredList = new ArrayList<>();
+                for(PlaceOfInterest placeOfInterest : mFilteredList){
+                    String title = placeOfInterest.getTitle().toLowerCase();
+                    if(title.contains(charSequence.toString().toLowerCase())){
+                        filteredList.add(placeOfInterest);
+                    }
+                }
+                return  filteredList;
+            }
+        };
+
+
+        return filter;
+    }
 
     private class ViewHolder {
         public TextView tv_title;
@@ -26,11 +78,15 @@ public class POIListAdapter extends BaseAdapter {
 
     public POIListAdapter(Context context,List<PlaceOfInterest> list) {
         mContext = context;
-        mList = list;
+        mFilteredList = list;
     }
 
-    public void setList(final List<PlaceOfInterest> list) {
-        mList = list;
+    public void setFilteredList(final List<PlaceOfInterest> filteredList) {
+        mFilteredList = filteredList;
+        /**
+         * Save the original list.
+         */
+        mOriginalList = filteredList;
     }
 
     /**
@@ -41,8 +97,8 @@ public class POIListAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         int count = 0;
-        if(null != mList){
-            count = mList.size();
+        if(null != mFilteredList){
+            count = mFilteredList.size();
         }
         return count;
     }
@@ -58,8 +114,8 @@ public class POIListAdapter extends BaseAdapter {
     @Override
     public Object getItem(final int position) {
         PlaceOfInterest obj = null;
-        if(null != mList){
-            obj = mList.get(position);
+        if(null != mFilteredList){
+            obj = mFilteredList.get(position);
         }
         return obj;
     }
@@ -74,7 +130,7 @@ public class POIListAdapter extends BaseAdapter {
     @Override
     public long getItemId(final int position) {
         /* int id = -1;
-        if(null != mList){
+        if(null != mFilteredList){
             PlaceOfInterest obj = (PlaceOfInterest) getItem(position);
             id = obj.getId();
         }*/

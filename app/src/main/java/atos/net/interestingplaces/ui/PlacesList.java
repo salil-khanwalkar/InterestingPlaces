@@ -1,7 +1,11 @@
 package atos.net.interestingplaces.ui;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,6 +45,32 @@ public class PlacesList extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_places_list, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+
+//        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(false);
+
+        SearchView.OnQueryTextListener onQueryTextListener = new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(final String query) {
+                mAdapter.getFilter().filter(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(final String newText) {
+                mAdapter.getFilter().filter(newText);
+                return true;
+            }
+        };
+
+        searchView.setOnQueryTextListener(onQueryTextListener);
+
         return true;
     }
 
@@ -159,7 +189,7 @@ public class PlacesList extends BaseActivity {
      * @param placeOfInterests - List of points of interest.
      */
     private void updateView(List<PlaceOfInterest> placeOfInterests){
-        mAdapter.setList(placeOfInterests);
+        mAdapter.setFilteredList(placeOfInterests);
         mAdapter.notifyDataSetChanged();
     }
 
