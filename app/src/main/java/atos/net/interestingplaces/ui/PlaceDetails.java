@@ -64,9 +64,29 @@ public class PlaceDetails extends BaseActivity {
      * @param placeOfInterest object to use to update the UI.
      */
     private void update(PlaceOfInterest placeOfInterest){
+        String value = "Not available";
+        setTitle(placeOfInterest.getTitle());
+        /**
+         * Assuming that the title will never be null.
+         */
         mTitle.setText(placeOfInterest.getTitle());
-        mTransport.setText(placeOfInterest.getTransport());
-        mAddress.setText(placeOfInterest.getAddress());
-        mDescription.setText(placeOfInterest.getDescription());
+
+        value = placeOfInterest.getTransport();
+        if(isNullString(value)){
+            value = "Transport not available";
+        }
+        mTransport.setText(value);
+
+        value = placeOfInterest.getAddress();
+        if(isNullString(value)){
+            value = "Address not available";
+        }
+        mAddress.setText(value);
+
+        value = placeOfInterest.getDescription();
+        if(isNullString(value)){
+            value = "Description not available";
+        }
+        mDescription.setText(value);
     }
 }

@@ -53,7 +53,7 @@ public class PlacesList extends BaseActivity {
 //        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
 
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(false);
+        searchView.setIconifiedByDefault(true);
 
         SearchView.OnQueryTextListener onQueryTextListener = new SearchView.OnQueryTextListener() {
             @Override
@@ -71,7 +71,7 @@ public class PlacesList extends BaseActivity {
 
         searchView.setOnQueryTextListener(onQueryTextListener);
 
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -103,11 +103,13 @@ public class PlacesList extends BaseActivity {
      * via the webservice.
      */
     private void getPOIList(){
+        showProgress();
         long count = POIHelper.getCount(this);
         Log.d(TAG, "Found " + count + " Records");
         if(count > 0){
             ArrayList<PlaceOfInterest> list = (ArrayList<PlaceOfInterest>) readAll();
             updateView(list);
+            hideProgress();
         }else {
             performPOIListRequest();
         }
@@ -137,6 +139,7 @@ public class PlacesList extends BaseActivity {
                     int level = temp.getLevel();
                     switch (level){
                         case PlaceOfInterest.RECORD_LEVEL_PARTIAL:
+                            showProgress();
                             performPOIDetailsRequest(obj);
                             break;
                         case PlaceOfInterest.RECORD_LEVEL_COMPLETE:
@@ -211,8 +214,7 @@ public class PlacesList extends BaseActivity {
 
         @Override
         public void onRequestFailure(final com.octo.android.robospice.persistence.exception.SpiceException e) {
-            // TODO : Handle failure
-
+            hideProgress();
         }
 
         @Override
@@ -225,6 +227,7 @@ public class PlacesList extends BaseActivity {
              * Update the UI.
              */
             updateView(poiList);
+            hideProgress();
         }
     }
 
@@ -236,7 +239,7 @@ public class PlacesList extends BaseActivity {
 
         @Override
         public void onRequestFailure(final SpiceException e) {
-            // TODO : Handle Failure
+            hideProgress();
         }
 
         @Override
@@ -254,7 +257,7 @@ public class PlacesList extends BaseActivity {
              * Start the details activity
              */
             gotoDetails(placeOfInterest);
-
+            hideProgress();
         }
     }
 }
