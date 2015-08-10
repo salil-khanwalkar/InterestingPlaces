@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +39,25 @@ public class PlacesList extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_places_list);
         init();
-        getPOIList();
+        getPOIList(savedInstanceState);
+    }
+
+    /**
+     * Save all appropriate fragment state.
+     *
+     * @param outState
+     */
+    @Override
+    protected void onSaveInstanceState(final Bundle outState) {
+        outState.putSerializable("PlacesList", (Serializable) mAdapter.getFilteredList());
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(final Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+/*        List<PlaceOfInterest> list = (List<PlaceOfInterest>) savedInstanceState.getSerializable("PlacesList");
+        updateView(list);*/
     }
 
     @Override
@@ -99,20 +118,47 @@ public class PlacesList extends BaseActivity {
     }
 
     /**
-     * Get the POI list from either the database or
+     * Get the POI list from either the Bundle , database or
      * via the webservice.
      */
-    private void getPOIList(){
+    private void getPOIList(final Bundle savedInstanceState){
+        ArrayList<PlaceOfInterest> list = null;
         showProgress();
-        long count = POIHelper.getCount(this);
+        if(null != savedInstanceState){
+            /**
+             * Check if we can get the data from the bundle
+             */
+            if(savedInstanceState.containsKey("PlacesList")){
+                list = (ArrayList<PlaceOfInterest>) savedInstanceState.getSerializable("PlacesList");
+                updateView(list);
+                hideProgress();
+            }
+        }else {
+            /**
+             * Check if we can get the data from the database
+             */
+            long count = POIHelper.getCount(this);
+            Log.d(TAG, "Found " + count + " Records");
+            if(count > 0){
+                list = (ArrayList<PlaceOfInterest>) readAll();
+                updateView(list);
+                hideProgress();
+            }else {
+                /**
+                 * Get the data from the webservice
+                 */
+                performPOIListRequest();
+            }
+        }
+/*        long count = POIHelper.getCount(this);
         Log.d(TAG, "Found " + count + " Records");
         if(count > 0){
-            ArrayList<PlaceOfInterest> list = (ArrayList<PlaceOfInterest>) readAll();
+            list = (ArrayList<PlaceOfInterest>) readAll();
             updateView(list);
             hideProgress();
         }else {
             performPOIListRequest();
-        }
+        }*/
     }
 
     /**

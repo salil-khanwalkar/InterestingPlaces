@@ -16,15 +16,33 @@ public class PlaceDetails extends BaseActivity {
     private TextView mAddress;
     private TextView mTransport;
     private TextView mDescription;
+    private PlaceOfInterest mPlaceOfInterest = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_details);
-        PlaceOfInterest placeOfInterest = (PlaceOfInterest) getIntent().
-                getSerializableExtra("PlaceDetails");
         init();
-        update(placeOfInterest);
+        if(null != savedInstanceState){
+            if(savedInstanceState.containsKey("PlaceDetails")){
+                mPlaceOfInterest = (PlaceOfInterest) savedInstanceState.getSerializable("PlaceDetails");
+            }
+        }else {
+            mPlaceOfInterest = (PlaceOfInterest) getIntent().
+                    getSerializableExtra("PlaceDetails");
+        }
+        update(mPlaceOfInterest);
+    }
+
+    /**
+     * Save all appropriate fragment state.
+     *
+     * @param outState
+     */
+    @Override
+    protected void onSaveInstanceState(final Bundle outState) {
+        outState.putSerializable("PlaceDetails",mPlaceOfInterest);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

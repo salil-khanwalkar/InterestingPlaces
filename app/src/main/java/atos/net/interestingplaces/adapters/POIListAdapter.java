@@ -89,6 +89,10 @@ public class POIListAdapter extends BaseAdapter implements Filterable {
         mOriginalList = filteredList;
     }
 
+    public List<PlaceOfInterest> getFilteredList() {
+        return mFilteredList;
+    }
+
     /**
      * How many items are in the data set represented by this Adapter.
      *
