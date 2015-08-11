@@ -6,4 +6,26 @@
           android:title="@string/action_settings"
           android:orderInCategory="100"
           app:showAsAction="never"/>-->
+
+    <item
+        android:id="@+id/action_locate"
+        android:icon="@drawable/ic_directions_white_24dp"
+        android:orderInCategory="100"
+        android:title=""
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_call"
+        android:icon="@drawable/ic_call_white_24dp"
+        android:orderInCategory="100"
+        android:title=""
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/action_email"
+        android:icon="@drawable/ic_email_white_24dp"
+        android:orderInCategory="100"
+        android:title=""
+        app:showAsAction="always"/>
+
 </menu>

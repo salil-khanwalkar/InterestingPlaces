@@ -1,12 +1,9 @@
 package atos.net.interestingplaces.ui;
 
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ProgressBar;
 
 import com.octo.android.robospice.Jackson2SpringAndroidSpiceService;
 import com.octo.android.robospice.SpiceManager;
@@ -19,11 +16,10 @@ import atos.net.interestingplaces.dto.POIList;
 import atos.net.interestingplaces.helper.POIHelper;
 import atos.net.interestingplaces.pojo.PlaceOfInterest;
 
-public class BaseActivity extends ActionBarActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     private static final String       TAG           = BaseActivity.class.getSimpleName();
-    protected            SpiceManager mSpiceManager = new SpiceManager(Jackson2SpringAndroidSpiceService.class);
-    private ProgressBar mProgressBar;
+    private SpiceManager mSpiceManager = new SpiceManager(Jackson2SpringAndroidSpiceService.class);
     private MenuItem mProgressMenuItem;
 
     protected static final String NULL_STRING = "null";
@@ -32,61 +28,8 @@ public class BaseActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
-        init();
     }
 
-
-    /**
-     * Prepare the Screen's standard options menu to be displayed.  This is
-     * called right before the menu is shown, every time it is shown.  You can
-     * use this method to efficiently enable/disable items or otherwise
-     * dynamically modify the contents.
-     * <p/>
-     * <p>The default implementation updates the system menu items based on the
-     * activity's state.  Deriving classes should always call through to the
-     * base class implementation.
-     *
-     * @param menu The options menu as last shown or first initialized by
-     *             onCreateOptionsMenu().
-     *
-     * @return You must return true for the menu to be displayed;
-     * if you return false it will not be shown.
-     *
-     * @see #onCreateOptionsMenu
-     */
-    /*@Override
-    public boolean onPrepareOptionsMenu(final Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_base, menu);
-        mProgressMenuItem = menu.findItem(R.id.action_progress);
-        ProgressBar pb = (ProgressBar) MenuItemCompat.getActionView(mProgressMenuItem);
-        pb.setVisibility(View.VISIBLE);
-        return super.onPrepareOptionsMenu(menu);
-    }*/
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_base, menu);
-        mProgressMenuItem = menu.findItem(R.id.action_progress);
-        ProgressBar pb = (ProgressBar) MenuItemCompat.getActionView(mProgressMenuItem);
-        return true;
-    }
-
-        /*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
 
     /**
      * Dispatch onStart() to all fragments.  Ensure any created loaders are
@@ -105,17 +48,9 @@ public class BaseActivity extends ActionBarActivity {
     }
 
     /**
-     * Initialize the UI components.
-     */
-    private void init(){
-//        mProgressBar = (ProgressBar) findViewById(R.id.pb_progress);
-    }
-
-    /**
      * Show the progress bar
      */
     protected void showProgress(){
-//        mProgressBar.setVisibility(View.VISIBLE);
         if(null != mProgressMenuItem) {
             mProgressMenuItem.setActionView(R.layout.action_view_progress);
             mProgressMenuItem.setVisible(true);
@@ -126,7 +61,6 @@ public class BaseActivity extends ActionBarActivity {
      * Hide the progress bar
      */
     protected void hideProgress(){
-//        mProgressBar.setVisibility(View.GONE);
         if(null != mProgressMenuItem) {
             mProgressMenuItem.setActionView(null);
             mProgressMenuItem.setVisible(false);
@@ -135,13 +69,17 @@ public class BaseActivity extends ActionBarActivity {
 
     /**
      * Method to read all records from DB.
-     * @return Returns list of @see{PlaceOfInterest} objects.
+     * @return Returns list of {@link PlaceOfInterest} objects.
      */
     protected List<PlaceOfInterest> readAll(){
         ArrayList<PlaceOfInterest> list = (ArrayList<PlaceOfInterest>) POIHelper.readAll(this);
         return list;
     }
 
+    /**
+     * Inserts (@link PlaceOfInterest} records in the database.
+     * @param poiList
+     */
     protected void insert(final POIList poiList){
         /**
          * Insert the records in DB
@@ -160,12 +98,38 @@ public class BaseActivity extends ActionBarActivity {
     }
 
     /**
+     * Update the {@link PlaceOfInterest} object in the database.
+     * @param placeOfInterest
+     */
+    protected void update(final PlaceOfInterest placeOfInterest){
+        POIHelper.update(this,placeOfInterest);
+    }
+
+    /**
      * Compares a string to 'null'. The webservice returns 'null' if
      * no data is available with the value of a json key-value pair
-     * @param stringToCompare
-     * @return {@see String#equalsIgnoreCase}
+     * @param stringToCompare String to compare with
+     * @return true if the string is 'null' , false otherwise.
      */
     protected boolean isNullString(final String stringToCompare){
         return stringToCompare.equalsIgnoreCase(NULL_STRING);
     }
+
+    /**
+     * Returns the SpiceManager instance.
+     * {@link SpiceManager}
+     * @return
+     */
+    protected SpiceManager getSpiceManager() {
+        return mSpiceManager;
+    }
+
+    /**
+     * Sets the MenuItem for the progressbar to be shown in the action bar.
+     * @param progressMenuItem
+     */
+    public void setProgressMenuItem(final MenuItem progressMenuItem) {
+        mProgressMenuItem = progressMenuItem;
+    }
+
 }

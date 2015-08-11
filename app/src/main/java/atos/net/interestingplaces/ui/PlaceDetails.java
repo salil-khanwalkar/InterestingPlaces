@@ -1,11 +1,17 @@
 package atos.net.interestingplaces.ui;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import atos.net.interestingplaces.R;
+import atos.net.interestingplaces.Utils;
 import atos.net.interestingplaces.pojo.PlaceOfInterest;
 
 public class PlaceDetails extends BaseActivity {
@@ -31,7 +37,7 @@ public class PlaceDetails extends BaseActivity {
             mPlaceOfInterest = (PlaceOfInterest) getIntent().
                     getSerializableExtra("PlaceDetails");
         }
-        update(mPlaceOfInterest);
+        updateView();
     }
 
     /**
@@ -41,7 +47,7 @@ public class PlaceDetails extends BaseActivity {
      */
     @Override
     protected void onSaveInstanceState(final Bundle outState) {
-        outState.putSerializable("PlaceDetails",mPlaceOfInterest);
+        outState.putSerializable("PlaceDetails", mPlaceOfInterest);
         super.onSaveInstanceState(outState);
     }
 
@@ -60,8 +66,29 @@ public class PlaceDetails extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id){
+            case R.id.action_locate:
+                Log.d(TAG,"Locate");
+                // Uri gmmIntentUri = Uri.parse("google.navigation:q=Taronga+Zoo,+Sydney+Australia");
+                try {
+                    String scheme = "google.navigation:q=";
+                    String address = URLEncoder.encode(mPlaceOfInterest.getAddress(),"UTF-8");
+                    String mode = "&mode=d";
+                    Utils.launchMap(PlaceDetails.this,Uri.parse(scheme+address+mode));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                return true;
+            case R.id.action_call:
+                Log.d(TAG, "Call");
+                Utils.launchCall(PlaceDetails.this,mPlaceOfInterest.getPhone());
+                return true;
+            case R.id.action_email:
+                Log.d(TAG,"Email");
+                Utils.launchEmail(PlaceDetails.this,mPlaceOfInterest.getEmail(),
+                        mPlaceOfInterest.getTitle(), "");
+                return true;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -79,29 +106,28 @@ public class PlaceDetails extends BaseActivity {
 
     /**
      * Update the UI
-     * @param placeOfInterest object to use to update the UI.
      */
-    private void update(PlaceOfInterest placeOfInterest){
+    private void updateView(){
         String value = "Not available";
-        setTitle(placeOfInterest.getTitle());
+        setTitle(mPlaceOfInterest.getTitle());
         /**
          * Assuming that the title will never be null.
          */
-        mTitle.setText(placeOfInterest.getTitle());
+        mTitle.setText(mPlaceOfInterest.getTitle());
 
-        value = placeOfInterest.getTransport();
+        value = mPlaceOfInterest.getTransport();
         if(isNullString(value)){
             value = "Transport not available";
         }
         mTransport.setText(value);
 
-        value = placeOfInterest.getAddress();
+        value = mPlaceOfInterest.getAddress();
         if(isNullString(value)){
             value = "Address not available";
         }
         mAddress.setText(value);
 
-        value = placeOfInterest.getDescription();
+        value = mPlaceOfInterest.getDescription();
         if(isNullString(value)){
             value = "Description not available";
         }

@@ -3,14 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="atos.net.interestingplaces.ui.PlacesList">
 
-   <!-- <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />-->
-
     <item android:id="@+id/action_search"
           android:title="Search"
           app:actionViewClass="android.support.v7.widget.SearchView"
           app:showAsAction="always"
           android:icon="@android:drawable/ic_menu_search"
+        />
+
+
+    <item
+        android:id="@+id/action_progress"
+        android:visible="false"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        app:actionLayout="@layout/action_view_progress"
+        app:actionViewClass="android.widget.ProgressBar"
         />
 
 </menu>

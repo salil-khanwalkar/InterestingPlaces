@@ -33,13 +33,14 @@ public class PlacesList extends BaseActivity {
     private static final String TAG = PlacesList.class.getSimpleName();
     private ListView mListView;
     private POIListAdapter mAdapter;
+    private Bundle mSavedInstanceState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_places_list);
         init();
-        getPOIList(savedInstanceState);
+//        getPOIList(savedInstanceState);
     }
 
     /**
@@ -56,15 +57,35 @@ public class PlacesList extends BaseActivity {
     @Override
     protected void onRestoreInstanceState(final Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-/*        List<PlaceOfInterest> list = (List<PlaceOfInterest>) savedInstanceState.getSerializable("PlacesList");
-        updateView(list);*/
+    }
+
+    /**
+     * Prepare the Screen's standard options menu to be displayed.  This is
+     * called right before the menu is shown, every time it is shown.  You can
+     * use this method to efficiently enable/disable items or otherwise
+     * dynamically modify the contents.
+     * <p/>
+     * <p>The default implementation updates the system menu items based on the
+     * activity's state.  Deriving classes should always call through to the
+     * base class implementation.
+     *
+     * @param menu The options menu as last shown or first initialized by
+     *             onCreateOptionsMenu().
+     *
+     * @return You must return true for the menu to be displayed;
+     * if you return false it will not be shown.
+     *
+     * @see #onCreateOptionsMenu
+     */
+    @Override
+    public boolean onPrepareOptionsMenu(final Menu menu) {
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_places_list, menu);
-
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         MenuItem menuItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
@@ -90,22 +111,11 @@ public class PlacesList extends BaseActivity {
 
         searchView.setOnQueryTextListener(onQueryTextListener);
 
+        MenuItem progressMenuItem = menu.findItem(R.id.action_progress);
+        setProgressMenuItem(progressMenuItem);
+        getPOIList(mSavedInstanceState);
+
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -113,7 +123,7 @@ public class PlacesList extends BaseActivity {
      */
     private void performPOIListRequest(){
         PoiListRequest request = new PoiListRequest();
-        mSpiceManager.execute(request, new POIListRequestListener());
+        getSpiceManager().execute(request, new POIListRequestListener());
 
     }
 
@@ -221,7 +231,7 @@ public class PlacesList extends BaseActivity {
      */
     private void performPOIDetailsRequest(PlaceOfInterest placeOfInterest){
         PoiDetailsRequest poiDetailsRequest = new PoiDetailsRequest(placeOfInterest.getId());
-        mSpiceManager.execute(poiDetailsRequest, new POIDetailsRequestListener());
+        getSpiceManager().execute(poiDetailsRequest, new POIDetailsRequestListener());
     }
 
     /**
@@ -298,7 +308,7 @@ public class PlacesList extends BaseActivity {
             /**
              * Update the record in DB
              */
-            POIHelper.update(PlacesList.this,placeOfInterest);
+            update(placeOfInterest);
             /**
              * Start the details activity
              */

@@ -1,6 +1,7 @@
 package atos.net.interestingplaces.adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,12 +9,14 @@ import android.widget.Adapter;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import atos.net.interestingplaces.R;
+import atos.net.interestingplaces.Utils;
 import atos.net.interestingplaces.pojo.PlaceOfInterest;
 
 /**
@@ -74,6 +77,7 @@ public class POIListAdapter extends BaseAdapter implements Filterable {
 
     private class ViewHolder {
         public TextView tv_title;
+        public ImageButton ib_locate;
     }
 
     public POIListAdapter(Context context,List<PlaceOfInterest> list) {
@@ -170,6 +174,7 @@ public class POIListAdapter extends BaseAdapter implements Filterable {
             view = inflater.inflate(R.layout.list_row,null,false);
             holder = new ViewHolder();
             holder.tv_title = (TextView) view.findViewById(R.id.tv_title);
+            holder.ib_locate = (ImageButton) view.findViewById(R.id.ib_locate);
             view.setTag(holder);
         }else {
             holder = (ViewHolder) view.getTag();
@@ -177,6 +182,14 @@ public class POIListAdapter extends BaseAdapter implements Filterable {
 
         placeOfInterest = (PlaceOfInterest) getItem(position);
         holder.tv_title.setText(placeOfInterest.getTitle());
+
+        final PlaceOfInterest finalPlaceOfInterest = placeOfInterest;
+        holder.ib_locate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                Utils.launchMap(mContext, Uri.fromParts("geo", finalPlaceOfInterest.getGeoCoordinates(),null));
+            }
+        });
 
         return view;
     }
