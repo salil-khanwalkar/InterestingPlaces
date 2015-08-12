@@ -2,13 +2,13 @@ package atos.net.interestingplaces;
 
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
-import atos.net.interestingplaces.interfaces.Hosts;
+import atos.net.interestingplaces.interfaces.Constants;
 import atos.net.interestingplaces.pojo.PlaceOfInterest;
 
 /**
  * Created by a551481 on 04-08-2015.
  */
-public class PoiDetailsRequest extends SpringAndroidSpiceRequest<PlaceOfInterest> implements Hosts {
+public class PoiDetailsRequest extends SpringAndroidSpiceRequest<PlaceOfInterest> implements Constants {
 
     private int mId;
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
@@ -12,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
@@ -20,6 +22,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import atos.net.interestingplaces.NetworkUtil;
 import atos.net.interestingplaces.PoiDetailsRequest;
 import atos.net.interestingplaces.PoiListRequest;
 import atos.net.interestingplaces.R;
@@ -34,11 +37,13 @@ public class PlacesList extends BaseActivity {
     private ListView mListView;
     private POIListAdapter mAdapter;
     private Bundle mSavedInstanceState;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_places_list);
+        mSavedInstanceState = savedInstanceState;
         init();
 //        getPOIList(savedInstanceState);
     }
@@ -90,8 +95,6 @@ public class PlacesList extends BaseActivity {
         MenuItem menuItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
 
-//        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
-
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(true);
 
@@ -122,9 +125,13 @@ public class PlacesList extends BaseActivity {
      * Get the POI list from the server.
      */
     private void performPOIListRequest(){
-        PoiListRequest request = new PoiListRequest();
-        getSpiceManager().execute(request, new POIListRequestListener());
-
+        if(NetworkUtil.isConnected(this)){
+            PoiListRequest request = new PoiListRequest();
+            getSpiceManager().execute(request, new POIListRequestListener());
+        }else {
+            Toast.makeText(this,getString(R.string.no_internet),Toast.LENGTH_LONG).show();
+            hideProgress();
+        }
     }
 
     /**
@@ -223,6 +230,28 @@ public class PlacesList extends BaseActivity {
         });
         mAdapter = new POIListAdapter(this,null);
         mListView.setAdapter(mAdapter);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.srl_refresh);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.primary_dark, R.color.accent, R.color.primary);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(NetworkUtil.isConnected(PlacesList.this)){
+                    /**
+                     * Refresh the list view data, discard all data from the
+                     * Bundle or the Database.
+                     */
+                    deleteAll();
+                    getPOIList(null);
+                }else {
+                    Toast.makeText(PlacesList.this,
+                            PlacesList.this.getString(R.string.no_internet),
+                            Toast.LENGTH_LONG).show();
+                    hideProgress();
+                }
+
+            }
+        });
     }
 
     /**
@@ -230,8 +259,13 @@ public class PlacesList extends BaseActivity {
      * @param placeOfInterest Place to get the details of.
      */
     private void performPOIDetailsRequest(PlaceOfInterest placeOfInterest){
-        PoiDetailsRequest poiDetailsRequest = new PoiDetailsRequest(placeOfInterest.getId());
-        getSpiceManager().execute(poiDetailsRequest, new POIDetailsRequestListener());
+        if(NetworkUtil.isConnected(this)) {
+            PoiDetailsRequest poiDetailsRequest = new PoiDetailsRequest(placeOfInterest.getId());
+            getSpiceManager().execute(poiDetailsRequest, new POIDetailsRequestListener());
+        }else{
+            Toast.makeText(this,getString(R.string.no_internet),Toast.LENGTH_LONG).show();
+            hideProgress();
+        }
     }
 
     /**
@@ -250,6 +284,18 @@ public class PlacesList extends BaseActivity {
     private void updateView(List<PlaceOfInterest> placeOfInterests){
         mAdapter.setFilteredList(placeOfInterests);
         mAdapter.notifyDataSetChanged();
+        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    /**
+     * Hide the progress bar
+     */
+    @Override
+    protected void hideProgress() {
+        super.hideProgress();
+        if(null != mSwipeRefreshLayout){
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
     }
 
     /**

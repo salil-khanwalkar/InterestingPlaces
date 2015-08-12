@@ -116,4 +116,9 @@ public class POIHelper {
         return dao.count();
     }
 
+    public static void deleteAll(Context context){
+        PlaceDao placeDao = getPOIDao(context);
+        placeDao.deleteAll();
+    }
+
 }

@@ -187,7 +187,9 @@ public class POIListAdapter extends BaseAdapter implements Filterable {
         holder.ib_locate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Utils.launchMap(mContext, Uri.fromParts("geo", finalPlaceOfInterest.getGeoCoordinates(),null));
+                String uri = "geo:0,0?q=" + finalPlaceOfInterest.getGeoCoordinates() +
+                        "(" + finalPlaceOfInterest.getTitle() + ")";
+                Utils.launchMap(mContext, Uri.parse(uri));
             }
         });
 

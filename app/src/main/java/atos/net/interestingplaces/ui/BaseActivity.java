@@ -106,6 +106,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     /**
+     * Deletes all records in the database
+     */
+    protected void deleteAll(){
+        POIHelper.deleteAll(this);
+    }
+
+    /**
      * Compares a string to 'null'. The webservice returns 'null' if
      * no data is available with the value of a json key-value pair
      * @param stringToCompare String to compare with
@@ -131,5 +138,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void setProgressMenuItem(final MenuItem progressMenuItem) {
         mProgressMenuItem = progressMenuItem;
     }
+
+
 
 }
