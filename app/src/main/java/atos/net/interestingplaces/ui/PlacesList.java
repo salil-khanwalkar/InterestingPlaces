@@ -22,7 +22,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import atos.net.interestingplaces.NetworkUtil;
+import atos.net.interestingplaces.utils.NetworkUtil;
 import atos.net.interestingplaces.PoiDetailsRequest;
 import atos.net.interestingplaces.PoiListRequest;
 import atos.net.interestingplaces.R;
@@ -154,7 +154,7 @@ public class PlacesList extends BaseActivity {
             /**
              * Check if we can get the data from the database
              */
-            long count = POIHelper.getCount(this);
+            long count = POIHelper.getCount(PlacesList.this);
             Log.d(TAG, "Found " + count + " Records");
             if(count > 0){
                 list = (ArrayList<PlaceOfInterest>) readAll();

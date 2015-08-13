@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import atos.net.interestingplaces.R;
-import atos.net.interestingplaces.Utils;
+import atos.net.interestingplaces.utils.Utils;
 import atos.net.interestingplaces.pojo.PlaceOfInterest;
 
 /**

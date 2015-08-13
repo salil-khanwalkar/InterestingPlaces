@@ -1,13 +1,11 @@
 package atos.net.interestingplaces.helper;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import atos.net.interestingplaces.dao.DaoMaster;
-import atos.net.interestingplaces.dao.DaoSession;
+import atos.net.interestingplaces.InterestingPlacesApplication;
 import atos.net.interestingplaces.dao.Place;
 import atos.net.interestingplaces.dao.PlaceDao;
 import atos.net.interestingplaces.pojo.PlaceOfInterest;
@@ -19,13 +17,19 @@ import de.greenrobot.dao.query.QueryBuilder;
 public class POIHelper {
 
 
-    private static PlaceDao getPOIDao(Context context){
+  /*  private static PlaceDao getPOIDao(Context context){
         DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(context,"poi.db",null);
         SQLiteDatabase db = devOpenHelper.getWritableDatabase();
         DaoMaster daoMaster = new DaoMaster(db);
         DaoSession daoSession = daoMaster.newSession();
         PlaceDao placeDao = daoSession.getPlaceDao();
         return placeDao;
+    }*/
+
+    private static PlaceDao getPOIDao(Context context){
+        InterestingPlacesApplication interestingPlacesApplication = null;
+        interestingPlacesApplication = (InterestingPlacesApplication) context.getApplicationContext();
+        return interestingPlacesApplication.getPlaceDao();
     }
 
     public static Place convertToGreenDao(PlaceOfInterest placeOfInterest){
@@ -101,14 +105,10 @@ public class POIHelper {
     public static void update(Context context,PlaceOfInterest placeOfInterest){
         Place place = convertToGreenDao(placeOfInterest);
         PlaceDao placeDao = getPOIDao(context);
-
         QueryBuilder builder = placeDao.queryBuilder();
         builder.where(PlaceDao.Properties.Id.eq(placeOfInterest.getId()));
-
         List<Place> placeList = builder.list();
-
         placeDao.update(place);
-
     }
 
     public static long getCount(Context context){

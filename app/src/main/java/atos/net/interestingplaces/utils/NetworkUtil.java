@@ -1,7 +1,7 @@
 /**
  * 
  */
-package atos.net.interestingplaces;
+package atos.net.interestingplaces.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

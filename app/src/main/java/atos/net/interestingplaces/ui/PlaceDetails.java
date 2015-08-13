@@ -15,7 +15,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import atos.net.interestingplaces.R;
-import atos.net.interestingplaces.Utils;
+import atos.net.interestingplaces.utils.Utils;
 import atos.net.interestingplaces.pojo.PlaceOfInterest;
 
 public class PlaceDetails extends BaseActivity {

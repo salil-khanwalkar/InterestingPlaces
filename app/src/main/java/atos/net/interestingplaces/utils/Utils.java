@@ -1,4 +1,4 @@
-package atos.net.interestingplaces;
+package atos.net.interestingplaces.utils;
 
 import android.content.Context;
 import android.content.Intent;
