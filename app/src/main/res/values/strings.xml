@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Interesting Places</string>
+    <string name="app_name">Waypoints</string>
     <string name="title_activity_splash">Interesting Places</string>
 
     <string name="hello_world">Hello world!</string>
@@ -8,4 +8,7 @@
     <string name="title_activity_places_list">Places</string>
     <string name="title_activity_place_details">Interesting Place</string>
     <string name="no_internet">Please check your internet connection</string>
+    <string name="share_via">Share via</string>
+    <string name="place_transition">PlaceTransition</string>
+    <string name="empty_text">No locations for you</string>
 </resources>

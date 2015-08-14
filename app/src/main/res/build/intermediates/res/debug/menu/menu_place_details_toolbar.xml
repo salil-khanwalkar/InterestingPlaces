@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/action_drive_car"
+        android:icon="@drawable/ic_directions_car_white_24dp"
+        android:orderInCategory="100"
+        android:title="Drive"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_bike"
+        android:icon="@drawable/ic_directions_bike_white_24dp"
+        android:orderInCategory="200"
+        android:title="Bike"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_walk"
+        android:icon="@drawable/ic_directions_walk_white_24dp"
+        android:orderInCategory="300"
+        android:title="Walk"
+        app:showAsAction="ifRoom"/>
+
+</menu><!-- From: file:/C:/Users/A551481/Documents/WL/InterestingPlaces/app/src/main/res/menu/menu_place_details_toolbar.xml -->

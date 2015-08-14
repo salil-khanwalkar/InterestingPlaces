@@ -1,0 +1,24 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="net.atos.interestingplaces.ui.PlacesList">
+
+    <item android:id="@+id/action_search"
+          android:title="Search"
+          app:actionViewClass="android.support.v7.widget.SearchView"
+          app:showAsAction="always"
+          android:icon="@android:drawable/ic_menu_search"
+        />
+
+
+    <item
+        android:id="@+id/action_progress"
+        android:visible="false"
+        android:orderInCategory="100"
+        app:showAsAction="always"
+        app:actionLayout="@layout/action_view_progress"
+        app:actionViewClass="android.widget.ProgressBar"
+        />
+
+</menu>
+<!-- From: file:/C:/Users/A551481/Documents/WL/InterestingPlaces/app/src/main/res/menu/menu_places_list.xml -->

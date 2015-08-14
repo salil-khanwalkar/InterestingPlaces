@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="atos.net.interestingplaces" >
+    package="net.atos.interestingplaces" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
-        android:name="atos.net.interestingplaces.InterestingPlacesApplication"
+        android:name="net.atos.interestingplaces.InterestingPlacesApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -17,8 +17,8 @@
             android:exported="false" />
 
         <activity
-            android:name=".ui.SplashActivity"
-            android:label="@string/title_activity_splash" >
+            android:name="net.atos.interestingplaces.ui.SplashActivity"
+            android:label="@string/app_name" >
 
         </activity>
        <!-- <activity
@@ -26,8 +26,8 @@
             android:label="@string/title_activity_base" >
         </activity>-->
         <activity
-            android:name=".ui.PlacesList"
-            android:label="@string/title_activity_places_list" >
+            android:name="net.atos.interestingplaces.ui.PlacesList"
+            android:label="@string/app_name" >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,12 +45,12 @@
 
         </activity>
         <activity
-            android:name=".ui.PlaceDetails"
-            android:label="@string/title_activity_place_details"
-            android:parentActivityName=".ui.PlacesList" >
+            android:name="net.atos.interestingplaces.ui.PlaceDetails"
+            android:label="@string/app_name"
+            android:parentActivityName="net.atos.interestingplaces.ui.PlacesList" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="atos.net.interestingplaces.ui.PlacesList" />
+                android:value="net.atos.interestingplaces.ui.PlacesList" />
         </activity>
     </application>
 

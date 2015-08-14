@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.0 rc2"
 
     defaultConfig {
-        applicationId "atos.net.interestingplaces"
+        applicationId "net.atos.interestingplaces"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
