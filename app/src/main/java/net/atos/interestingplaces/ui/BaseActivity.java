@@ -86,6 +86,7 @@ public abstract class BaseActivity extends AppCompatActivity {
          */
         long id = 0;
         List<PlaceOfInterest> placeOfInterests = poiList.getList();
+        // TODO : Bulk insert instead of one by one.
         for(PlaceOfInterest placeOfInterest : placeOfInterests){
             /**
              * Assuming that we haven't fetched the entire record so setting the record's

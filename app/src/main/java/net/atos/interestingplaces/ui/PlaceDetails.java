@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -108,11 +107,9 @@ public class PlaceDetails extends BaseActivity {
                 mShareActionProvider.setShareIntent(createShareIntent());
                 return true;
             case R.id.action_call:
-                Log.d(TAG, "Call");
                 Utils.launchCall(PlaceDetails.this, mPlaceOfInterest.getPhone());
                 return true;
             case R.id.action_email:
-                Log.d(TAG, "Email");
                 Utils.launchEmail(PlaceDetails.this, mPlaceOfInterest.getEmail(),
                         mPlaceOfInterest.getTitle(), "");
                 return true;
@@ -185,7 +182,7 @@ public class PlaceDetails extends BaseActivity {
      * Update the UI
      */
     private void updateView() {
-        String value = "Not available";
+        String value ;
         setTitle(mPlaceOfInterest.getTitle());
         /**
          * Assuming that the title will never be null.
@@ -194,21 +191,21 @@ public class PlaceDetails extends BaseActivity {
 
         value = mPlaceOfInterest.getTransport();
         if(isNullString(value)){
-            value = "Transport not available";
+            value = getString(R.string.transport_not_available);
         }
         mTransport.setText(value);
 
         value = mPlaceOfInterest.getAddress();
         if(isNullString(value)){
-            value = "Address not available";
+            value = getString(R.string.address_not_available);
         }
         mAddress.setText(value);
 
         value = mPlaceOfInterest.getDescription();
         if(isNullString(value)){
-            value = "Description not available";
+            value = getString(R.string.description_not_available);
         }
         mDescription.setText(value);
-        mToolbar.setTitle("Directions ");
+        mToolbar.setTitle(getString(R.string.place_details_toolbar_title));
     }
 }

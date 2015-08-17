@@ -287,7 +287,6 @@ public class PlacesList extends BaseActivity {
     private void updateView(List<PlaceOfInterest> placeOfInterests){
         mAdapter.setFilteredList(placeOfInterests);
         mAdapter.notifyDataSetChanged();
-        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     /**
@@ -302,8 +301,10 @@ public class PlacesList extends BaseActivity {
     }
 
     /**
-     * Start the PlaceDetails activity with the PlaceOfInterest data.
-     * @param placeOfInterest
+     * Start the PlaceDetails activity with the {@link PlaceOfInterest} data.
+     * The data is either fetched from the database or from the web service and then
+     * passed to the details view in a bundle.
+     * @param placeOfInterest POI to be shown
      */
     private void gotoDetails(PlaceOfInterest placeOfInterest){
         Intent intent = new Intent(PlacesList.this,PlaceDetails.class);
@@ -324,8 +325,8 @@ public class PlacesList extends BaseActivity {
     }
 
     /**
-     * Class to handle the data returned by .
-     * @see com.octo.android.robospice.request.listener.RequestListener
+     * Class to handle the data returned by
+     * {@link RequestListener}
      */
     private class POIListRequestListener implements RequestListener<POIList>{
 
