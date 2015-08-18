@@ -2,7 +2,6 @@ package net.atos.interestingplaces.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.octo.android.robospice.Jackson2SpringAndroidSpiceService;
@@ -19,7 +18,7 @@ import java.util.List;
 public abstract class BaseActivity extends AppCompatActivity {
 
     private static final String       TAG           = BaseActivity.class.getSimpleName();
-    private SpiceManager mSpiceManager = new SpiceManager(Jackson2SpringAndroidSpiceService.class);
+    private final SpiceManager mSpiceManager = new SpiceManager(Jackson2SpringAndroidSpiceService.class);
     private MenuItem mProgressMenuItem;
 
     protected static final String NULL_STRING = "null";
@@ -78,13 +77,13 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * Inserts (@link PlaceOfInterest} records in the database.
-     * @param poiList
+     * @param poiList Object which contains the list of POIs to be
+     *                inserted in the database.
      */
     protected void insert(final POIList poiList){
         /**
          * Insert the records in DB
          */
-        long id = 0;
         List<PlaceOfInterest> placeOfInterests = poiList.getList();
         // TODO : Bulk insert instead of one by one.
         for(PlaceOfInterest placeOfInterest : placeOfInterests){
@@ -93,14 +92,13 @@ public abstract class BaseActivity extends AppCompatActivity {
              * data level to partial
              */
             placeOfInterest.setLevel(PlaceOfInterest.RECORD_LEVEL_PARTIAL);
-            id = POIHelper.insert(this,placeOfInterest);
-            Log.d(TAG, "Inserted " + id + " Records");
+            POIHelper.insert(this,placeOfInterest);
         }
     }
 
     /**
      * Update the {@link PlaceOfInterest} object in the database.
-     * @param placeOfInterest
+     * @param placeOfInterest {@link PlaceOfInterest} to be updated.
      */
     protected void update(final PlaceOfInterest placeOfInterest){
         POIHelper.update(this,placeOfInterest);
@@ -126,7 +124,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     /**
      * Returns the SpiceManager instance.
      * {@link SpiceManager}
-     * @return
+     * @return Returns an instance of {@link SpiceManager}
      */
     protected SpiceManager getSpiceManager() {
         return mSpiceManager;
@@ -134,7 +132,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     /**
      * Sets the MenuItem for the progressbar to be shown in the action bar.
-     * @param progressMenuItem
+     * @param progressMenuItem Sets the {@link MenuItem} as a progress bar.
      */
     public void setProgressMenuItem(final MenuItem progressMenuItem) {
         mProgressMenuItem = progressMenuItem;

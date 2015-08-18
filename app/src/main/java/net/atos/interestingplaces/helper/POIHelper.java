@@ -29,7 +29,7 @@ public class POIHelper {
 
     /**
      * Get the PlaceDao reference
-     * @param context
+     * @param context Context
      * @return {@link PlaceDao} object.
      */
     private static PlaceDao getPOIDao(Context context){
@@ -48,7 +48,7 @@ public class POIHelper {
     // TODO : Explore more on GreenDAO KEEP Sections so that we can use the same {@link Place}
     // object for database operations and JSON parsing.
 
-    public static Place convertToGreenDao(PlaceOfInterest placeOfInterest){
+    private static Place convertToGreenDao(PlaceOfInterest placeOfInterest){
         Place place = new Place();
         place.setId((long) placeOfInterest.getId());
         place.setPlaceId(placeOfInterest.getId());
@@ -72,7 +72,7 @@ public class POIHelper {
      */
     // TODO : Explore more on GreenDAO KEEP Sections so that we can use the same {@link Place}
     // object for database operations and JSON parsing.
-    public static PlaceOfInterest convertFromGreenDao(Place place){
+    private static PlaceOfInterest convertFromGreenDao(Place place){
         PlaceOfInterest placeOfInterest = new PlaceOfInterest();
 
         placeOfInterest.setId(place.getPlaceId());
@@ -91,7 +91,7 @@ public class POIHelper {
     /**
      * Insert a single {@link PlaceOfInterest} object to the database.
      * @param context Context
-     * @param placeOfInterest
+     * @param placeOfInterest {@link PlaceOfInterest} object to be inserted in the database.
      * @return Number of rows inserted
      */
     public static long insert(Context context,PlaceOfInterest placeOfInterest){
@@ -156,14 +156,15 @@ public class POIHelper {
         PlaceDao placeDao = getPOIDao(context);
         QueryBuilder builder = placeDao.queryBuilder();
         builder.where(PlaceDao.Properties.Id.eq(placeOfInterest.getId()));
-        List<Place> placeList = builder.list();
+        // TODO : Check if this is needed ??
+//        List<Place> placeList = builder.list();
         placeDao.update(place);
     }
 
     /**
      * Returns number of records in the database
-     * @param context
-     * @return
+     * @param context Context
+     * @return Returns the number of {@link Place} objects in the database.
      */
     public static long getCount(Context context){
         PlaceDao dao = getPOIDao(context);

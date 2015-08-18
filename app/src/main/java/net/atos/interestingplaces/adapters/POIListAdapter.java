@@ -24,9 +24,9 @@ import java.util.List;
  */
 public class POIListAdapter extends BaseAdapter implements Filterable {
 
-    private Context               mContext;
-    private List<PlaceOfInterest> mFilteredList;
-    private List<PlaceOfInterest> mOriginalList;
+    private final Context               mContext;
+    private       List<PlaceOfInterest> mFilteredList;
+    private       List<PlaceOfInterest> mOriginalList;
 
     /**
      * <p>Returns a filter that can be used to constrain data with a filtering
@@ -44,7 +44,7 @@ public class POIListAdapter extends BaseAdapter implements Filterable {
             @Override
             protected FilterResults performFiltering(final CharSequence constraint) {
                 mFilteredList = filterList(constraint);
-                FilterResults         filterResults = new FilterResults();
+                FilterResults filterResults = new FilterResults();
                 filterResults.values = mFilteredList;
                 filterResults.count = mFilteredList.size();
                 return filterResults;
@@ -56,18 +56,18 @@ public class POIListAdapter extends BaseAdapter implements Filterable {
                 POIListAdapter.this.notifyDataSetChanged();
             }
 
-            private List<PlaceOfInterest> filterList(CharSequence charSequence){
-                if(0 == charSequence.length()){
+            private List<PlaceOfInterest> filterList(CharSequence charSequence) {
+                if (0 == charSequence.length()) {
                     return mOriginalList;
                 }
                 List<PlaceOfInterest> filteredList = new ArrayList<>();
-                for(PlaceOfInterest placeOfInterest : mFilteredList){
+                for (PlaceOfInterest placeOfInterest : mFilteredList) {
                     String title = placeOfInterest.getTitle().toLowerCase();
-                    if(title.contains(charSequence.toString().toLowerCase())){
+                    if (title.contains(charSequence.toString().toLowerCase())) {
                         filteredList.add(placeOfInterest);
                     }
                 }
-                return  filteredList;
+                return filteredList;
             }
         };
 
@@ -76,11 +76,11 @@ public class POIListAdapter extends BaseAdapter implements Filterable {
     }
 
     private class ViewHolder {
-        public TextView tv_title;
+        public TextView    tv_title;
         public ImageButton ib_locate;
     }
 
-    public POIListAdapter(Context context,List<PlaceOfInterest> list) {
+    public POIListAdapter(Context context, List<PlaceOfInterest> list) {
         mContext = context;
         mFilteredList = list;
     }
@@ -105,7 +105,7 @@ public class POIListAdapter extends BaseAdapter implements Filterable {
     @Override
     public int getCount() {
         int count = 0;
-        if(null != mFilteredList){
+        if (null != mFilteredList) {
             count = mFilteredList.size();
         }
         return count;
@@ -122,7 +122,7 @@ public class POIListAdapter extends BaseAdapter implements Filterable {
     @Override
     public Object getItem(final int position) {
         PlaceOfInterest obj = null;
-        if(null != mFilteredList){
+        if (null != mFilteredList) {
             obj = mFilteredList.get(position);
         }
         return obj;
@@ -166,17 +166,18 @@ public class POIListAdapter extends BaseAdapter implements Filterable {
      */
     @Override
     public View getView(final int position, final View convertView, final ViewGroup parent) {
-        ViewHolder holder = null;
-        View view = convertView;
+        ViewHolder      holder          = null;
+        View            view            = convertView;
         PlaceOfInterest placeOfInterest = null;
-        if(null == convertView){
+        if (null == convertView) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
-            view = inflater.inflate(R.layout.list_row,null,false);
+            view = inflater.inflate(R.layout.list_row, null, false);
             holder = new ViewHolder();
             holder.tv_title = (TextView) view.findViewById(R.id.tv_title);
             holder.ib_locate = (ImageButton) view.findViewById(R.id.ib_locate);
             view.setTag(holder);
-        }else {
+        }
+        else {
             holder = (ViewHolder) view.getTag();
         }
 

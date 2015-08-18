@@ -42,7 +42,6 @@ public class NetworkUtil {
 	 * Check if there is any connectivity to a Wifi network
 	 * 
 	 * @param context
-	 * @param type
 	 * @return
 	 */
 	public static boolean isConnectedWifi(final Context context) {
@@ -54,7 +53,6 @@ public class NetworkUtil {
 	 * Check if there is any connectivity to a mobile network
 	 * 
 	 * @param context
-	 * @param type
 	 * @return
 	 */
 	public static boolean isConnectedMobile(final Context context) {

@@ -49,7 +49,7 @@ public class PlaceDetails extends BaseActivity {
     /**
      * Save all appropriate fragment state.
      *
-     * @param outState
+     * @param outState Bundle in which to save the state
      */
     @Override
     protected void onSaveInstanceState(final Bundle outState) {
@@ -68,7 +68,7 @@ public class PlaceDetails extends BaseActivity {
 
     /**
      * Creates an intent for the ShareActionProvider
-     * @return
+     * @return Returns an intent which is used to share {@link PlaceOfInterest} data.
      */
     private Intent createShareIntent(){
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -86,8 +86,6 @@ public class PlaceDetails extends BaseActivity {
                 append("saddr=").
                 append(address).
                 toString();
-       /* shareIntent.putExtra(Intent.EXTRA_TEXT,
-                "Visit : " + mPlaceOfInterest.getTitle() + "at Address : " + mPlaceOfInterest.getAddress());*/
         shareIntent.putExtra(Intent.EXTRA_TEXT,
                 temp);
         startActivity(Intent.createChooser(shareIntent, getResources().getText(R.string.share_via)));

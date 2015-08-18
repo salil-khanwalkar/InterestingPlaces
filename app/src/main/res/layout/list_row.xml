@@ -24,10 +24,8 @@
         android:layout_weight="0.8"
         android:layout_height="?attr/listPreferredItemHeightLarge"
         android:id="@+id/tv_title"
-        android:text="POI"
         android:gravity="center_vertical"
         android:paddingLeft="10dp"
-        android:elevation="10dp"
         />
 
     <ImageButton
@@ -38,6 +36,7 @@
         android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
         android:src="@drawable/ic_place_black_24dp"
+        android:contentDescription="@string/image_content_description"
         android:background="@null"
         android:focusableInTouchMode="true"
         android:id="@+id/ib_locate"/>

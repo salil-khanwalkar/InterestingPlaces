@@ -7,21 +7,21 @@
         android:id="@+id/action_drive_car"
         android:icon="@drawable/ic_directions_car_white_24dp"
         android:orderInCategory="100"
-        android:title="Drive"
+        android:title="@string/menu_text_drive"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_bike"
         android:icon="@drawable/ic_directions_bike_white_24dp"
         android:orderInCategory="200"
-        android:title="Bike"
+        android:title="@string/menu_text_bike"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/action_walk"
         android:icon="@drawable/ic_directions_walk_white_24dp"
         android:orderInCategory="300"
-        android:title="Walk"
+        android:title="@string/menu_text_walk"
         app:showAsAction="ifRoom"/>
 
 </menu>

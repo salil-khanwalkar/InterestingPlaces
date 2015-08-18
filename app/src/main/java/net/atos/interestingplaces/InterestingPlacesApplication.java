@@ -44,7 +44,7 @@ public class InterestingPlacesApplication extends Application
 
     /**
      * Return the dao object
-     * @return
+     * @return Returns the {@link PlaceDao} object.
      */
     public PlaceDao getPlaceDao(){
         return mPlaceDao;

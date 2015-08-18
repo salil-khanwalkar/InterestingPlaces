@@ -21,7 +21,7 @@
         android:id="@+id/action_share"
         android:icon="@drawable/ic_share_white_24dp"
         android:orderInCategory="300"
-        android:title="Share"
+        android:title="@string/menu_text_share"
         app:showAsAction="ifRoom|collapseActionView"
         app:actionProviderClass="android.support.v7.widget.ShareActionProvider"/>
 

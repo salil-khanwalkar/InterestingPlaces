@@ -15,7 +15,10 @@ import org.springframework.web.client.RestTemplate;
  */
 public class PoiDetailsRequest extends SpringAndroidSpiceRequest<PlaceOfInterest> implements Constants {
 
-    private int mId;
+    /**
+     * ID for whom we have to fetch the details.
+     */
+    private final int mId;
 
     public PoiDetailsRequest(final int id) {
         super(PlaceOfInterest.class);
@@ -27,9 +30,9 @@ public class PoiDetailsRequest extends SpringAndroidSpiceRequest<PlaceOfInterest
         RestTemplate restTemplate = super.getRestTemplate();
         ClientHttpRequestFactory requestFactory = restTemplate
                 .getRequestFactory();
-        if(requestFactory instanceof SimpleClientHttpRequestFactory) {
+        if (requestFactory instanceof SimpleClientHttpRequestFactory) {
             SimpleClientHttpRequestFactory simpleClientHttpRequestFactory =
-                    (SimpleClientHttpRequestFactory)requestFactory;
+                    (SimpleClientHttpRequestFactory) requestFactory;
             simpleClientHttpRequestFactory.setConnectTimeout(CONNECTION_TIMEOUT);
             simpleClientHttpRequestFactory.setReadTimeout(READ_TIMEOUT);
             restTemplate.setRequestFactory(simpleClientHttpRequestFactory);

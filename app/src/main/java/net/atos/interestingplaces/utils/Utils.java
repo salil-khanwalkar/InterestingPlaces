@@ -36,9 +36,9 @@ public class Utils {
     /**
      * Starts an activity with an intent to send an email
      * Sends email to a single email id.
-     * @param emailId
-     * @param subject
-     * @param body
+     * @param emailId Email ID to send the email to.
+     * @param subject Subject of the email
+     * @param body Body of the email
      */
     public static void launchEmail(final Context context,final String emailId,
                                final String subject,final String body){
