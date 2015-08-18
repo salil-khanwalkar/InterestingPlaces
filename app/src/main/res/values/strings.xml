@@ -11,4 +11,9 @@
     <string name="share_via">Share via</string>
     <string name="place_transition">PlaceTransition</string>
     <string name="empty_text">No locations for you</string>
+    <string name="transport_not_available">Transport not available</string>
+    <string name="address_not_available">Address not available</string>
+    <string name="description_not_available">Description not available</string>
+    <string name="place_details_toolbar_title">Directions</string>
+    <string name="search_hint">Search</string>
 </resources>
